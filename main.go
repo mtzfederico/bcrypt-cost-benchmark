@@ -9,7 +9,7 @@ import (
 
 func main() {
 	var target time.Duration = 250 * time.Millisecond
-	cost := 8
+	cost := bcrypt.DefaultCost
 
 	for {
 		start := time.Now()
@@ -23,7 +23,7 @@ func main() {
 			return
 		}
 
-		if elapsed >= target {
+		if elapsed > target {
 			return
 		}
 
