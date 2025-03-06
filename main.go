@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"time"
 
@@ -8,8 +10,13 @@ import (
 )
 
 func main() {
-	var target time.Duration = 250 * time.Millisecond
+	costSeconds := flag.Int("target", 250, "The target cost in millisecond")
+	flag.Parse()
+
+	var target time.Duration = time.Duration(*costSeconds) * time.Millisecond
 	cost := bcrypt.DefaultCost
+
+	fmt.Printf("Starting Cost: %v Target: %v\n", cost, target)
 
 	for {
 		start := time.Now()
@@ -24,6 +31,7 @@ func main() {
 		}
 
 		if elapsed > target {
+			log.Println("Target Reached")
 			return
 		}
 
@@ -34,7 +42,7 @@ func main() {
 
 }
 
-// Returnes the hashed input as a string
+// Returns the hashed input as a string
 func hash(input string, cost int) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(input), cost)
 	if err != nil {
