@@ -11,16 +11,19 @@ import (
 
 func main() {
 	costSeconds := flag.Int("target", 250, "The target cost in millisecond")
+	passLength := flag.Int("passLen", 25, "The length of the random string hashed")
 	flag.Parse()
 
 	var target time.Duration = time.Duration(*costSeconds) * time.Millisecond
 	cost := bcrypt.DefaultCost
 
-	fmt.Printf("Starting Cost: %v Target: %v\n", cost, target)
+	pass := generateRandomPassword(*passLength)
+
+	fmt.Printf("Starting Cost: %v Target: %v\nUsing password: %s\n", cost, target, pass)
 
 	for {
 		start := time.Now()
-		_, err := hash("correctHorseBatteryStaple", cost)
+		_, err := hash(pass, cost)
 		elapsed := time.Since(start)
 
 		log.Printf("cost: %v, elapsed: %v, target: %v", cost, elapsed, target)
